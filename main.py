@@ -12,7 +12,7 @@ eventos = [ev_online, ev2_online, ev2]
 
 @app.route('/')
 def index():
-    return "<h1>Bombando</h1>"
+    return "<h1>Rodando</h1>"
 
 
 @app.route('/api/eventos/')
@@ -70,3 +70,10 @@ def deletar_evento(id):
     evento = get_evento_by_id_or_404(id)
     eventos.remove(evento)
     return jsonify({"message": "Evento deletado com sucesso"})
+
+
+@app.route('/api/eventos/<int:id>', methods=["PUT"])
+def editar_evento(id):
+    evento = get_evento_by_id_or_404(id)
+    eventos.remove(evento)
+    return jsonify({"message": "Evento editado com sucesso"})
