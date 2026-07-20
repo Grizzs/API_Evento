@@ -60,10 +60,10 @@ def detalhar_evento(id):
 
 
 @app.route('/api/eventos/<int:id>', methods=["DELETE"])
-def deletar_evento(id):
+def deletar_evpycacheento(id):
     evento = get_evento_by_id_or_404(id)
     eventos.remove(evento)
-    return jsonify({"message": "Evento deletado"})
+    return jsonify({"message": "Evento deletador"})
 
 def parse_and_return():
     data = request.get_json()
