@@ -24,6 +24,11 @@ class Evento:
             return 30
         else:
             return 0
-        
-
-
+    
+    def setter(self, nome=None, local=None, data=None):
+        if nome is not None:
+            self.nome = nome
+        if data is not None:
+            self.data = data
+        if local is not None:
+            self.local = local

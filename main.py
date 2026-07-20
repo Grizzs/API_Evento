@@ -23,25 +23,19 @@ def listar_eventos():
     return jsonify(eventos_dict)
 
 
-
-
 @app.route('/api/eventos/', methods=["POST"])
 def criar_evento():
-    data = json.loads(request.data)
-    nome = data.get("nome")
-    local = data.get("local")
-    data_evento = data.get("data")
-
+    nome, local, data_evento = parse_and_return()
     if not nome:
         abort(400, description="O campo 'nome' é obrigatório.")
         
     if local: 
-        evento = Evento(nome, data_evento, local)
+        evento = EventoOnline(nome, data_evento, local)
     else:
        
-        evento = Evento(nome, data_evento, local)
+        evento = EventoOnline(nome, data_evento)
     eventos.append(evento)
-    return data
+    return jsonify({"message": "Evento criado com sucesso", "evento": evento.__dict__}), 201
 
 
 @app.errorhandler(404)
@@ -71,9 +65,31 @@ def deletar_evento(id):
     eventos.remove(evento)
     return jsonify({"message": "Evento deletado com sucesso"})
 
+def parse_and_return():
+    data = request.get_json()
+    nome = data.get("nome")
+    local = data.get("local")
+    data_evento = data.get("data")
+    return nome, local, data_evento
 
 @app.route('/api/eventos/<int:id>', methods=["PUT"])
 def editar_evento(id):
+    
+    nome, local, data_evento = parse_and_return()
+    if not all([nome, local, data_evento]):
+        return jsonify({"error": "PUT exige nome, data e local completos"}), 400
     evento = get_evento_by_id_or_404(id)
-    eventos.remove(evento)
+    evento.setter(nome, data_evento, local)
+
     return jsonify({"message": "Evento editado com sucesso"})
+
+
+@app.route('/api/eventos/<int:id>', methods=["PATCH"])
+def patch_evento(id):
+    
+    nome, local, data_evento = parse_and_return()
+    evento = get_evento_by_id_or_404(id)
+    evento.setter(nome, local, data_evento)
+
+    return jsonify({"message": "Evento editado com sucesso"})
+
