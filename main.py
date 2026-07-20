@@ -63,7 +63,7 @@ def detalhar_evento(id):
 def deletar_evento(id):
     evento = get_evento_by_id_or_404(id)
     eventos.remove(evento)
-    return jsonify({"message": "Evento deletado com sucesso"})
+    return jsonify({"message": "Evento deletado"})
 
 def parse_and_return():
     data = request.get_json()
